@@ -1,0 +1,124 @@
+#logincol
+{    
+    width: 400px;
+    background-color:rgba(252, 7, 27, 0.5);
+    transition : all 1s;
+}
+
+.signin_login
+{
+    transform : translateZ(-1px) rotateY(90deg);
+    /* background-color: rgba(134, 250, 39, 0.377) ; */ 
+}
+
+.backimg
+{
+    margin :0;
+    padding : 0;
+    background: url(backgroundimage.jpg);
+    background-size :cover;
+    background-position: center;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+html,body{
+    height: 100%;
+}
+
+.loginheading
+{
+    color: black;
+    font-weight: 400;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.makemargin
+{
+    margin : 50px auto;
+    width : 300px;
+}
+
+#blur.active
+{
+    filter: blur(20px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.popup,.popup2
+{
+    position:fixed;
+    width:400px;
+    background-color: white;
+    visibility : hidden;
+    opacity : 0;
+    transition: all 0.5s;
+    top:45%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.popup.active,.popup2.active
+{
+    top:50%;
+    visibility: visible;
+    opacity:1;
+}
+
+.message
+{
+    box-sizing: border-box;
+    margin : 30px;
+    width: fit-content;   
+    max-width:40%;
+    background-color: white;
+    border-radius: 20px;
+    border: 2px solid black;
+    padding : 10px;
+}
+
+.messagename
+{
+    color : red;
+}
+
+.messagename:hover
+{
+    color : green;
+}
+
+#messagebtn:hover
+{
+    height: 60px;
+    width : 60px;
+    transition: 0.5s;
+}
+
+.messagetext
+{
+    margin-top: 10px;
+    font: 20px/30px sans-serif;
+    color: black;
+}
+
+.messagedatetime
+{
+    position: inherit;
+    text-align: end;
+    margin:5px;
+    font: 10px/14px bold;
+    color : red;
+}
+#msg-list {
+    height: 80vh;
+    overflow: auto;
+}
+
+#channel-list {
+    height: 80vh;
+    overflow: auto;
+}
