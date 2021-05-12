@@ -1,73 +1,65 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    if  (!localStorage.getItem('channel'))
-    {
-        localStorage.setItem('channel',"general");
-    }    
-    else
-    {
-        const name = localStorage.getItem('channel');
-        if ( name !== "general")
+    // conectar al web socket
+      var socket = io.connect(location.protocol+'//' + document.domain + ':' + location.port);
+        socket.on('connect', () => {
+            // notifica al servidor una nueva conexión
+            socket.emit('join');
+          
+            document.querySelector('#submit').disabled = true;
+    
+            // Enable button only if there is text in the input field
+            document.querySelector('#task').onkeyup = () => {
+                if (document.querySelector('#task').value.length > 0)
+                    document.querySelector('#submit').disabled = false;
+                else
+                    document.querySelector('#submit').disabled = true;
+            };
+          
+           document.querySelector('#new-task').onsubmit = () => {
+    
+                const mensaje = document.querySelector('#task').value;
+    
+                // Clear input field and disable button again
+                document.querySelector('#task').value = '';
+                document.querySelector('#submit').disabled = true;
+                socket.emit('submit mensaje', {'mensaje': mensaje});
+                // Stop form from submitting
+                return false;
+            };       
+    
+        });
+     
+    
+    
+    
+        $('#submit').on('click',function()
         {
-            console.log(name);
-            console.log(document.querySelector("#" + CSS.escape(name) ));
-        const request = new XMLHttpRequest();
-        request.open('POST', '/getmessages');
-
-        // Callback function for when request completes
-        request.onload = () => {
-
-            // Extract JSON data from request
-            const data = JSON.parse(request.responseText);
-
-            console.log(data);
-        if (data.channel_found)
-        {    
-            if (data.length !== 0){
-            // Update the messages
-                data.messages.forEach(message =>{
-                const contents = messagetemplate({'message_sender':message["sender"],'message_text':message["text"],'message_datetime':message["datetime"]}); 
-                document.querySelector('#messagecontainer').innerHTML += contents;
-                });
-            }
-            else{
-                document.querySelector('#messagecontainer').innerHTML = "";
+            //Fijo el scroll al fondo usando añadiendo una animación (animate)
+            $(".chats").animate({ scrollTop: $('.chats').prop("scrollHeight")}, 800);
+        });
+    
+        socket.on('joined', data => {
+            const li = document.createElement('li');
+            li.className = 'list'
+            li.innerHTML = `<b>${data.mensaje}`;
+            document.querySelector('#tasks').append(li);
+            console.log("aca si");
+        });
+      
+        socket.on('announce mensaje', data => {
+            let local = localStorage.getItem("localuser")
+            console.log(local)
+            const li = document.createElement('li');
+            if (data.user != local) {
+                li.className = 'client-chat'
+            }  
+            else {
+                li.className = 'my-chat'
             }
                 
-            // update the heading
-                document.querySelector('#channelheading').innerHTML = name;
-        }
-    };
-       
-        const data = new FormData();
-        data.append('channelname',name);
-        request.send(data);
-    }
-    }
-
-    // chat
-    document.querySelector('#submit').disabled = true;
-
-    // Enable button only if there is text in the input field
-    document.querySelector('#task').onkeyup = () => {
-        document.querySelector('#submit').disabled = false;
-    };
-
-    document.querySelector('#new-msj').onsubmit = () => {
-
-        // Create new item for list
-        const li = document.createElement('li');
-        li.innerHTML = document.querySelector('#task').value;
-
-        // Add new item to task list
-        document.querySelector('#tasks').append(li);
-
-        // Clear input field and disable button again
-        document.querySelector('#task').value = '';
-        document.querySelector('#submit').disabled = true;
-
-        // Stop form from submitting
-        return false;
-    };
-
-});
+            li.innerHTML = `<b>${data.user}:</b> ${data.mensaje} --- ${data.tiempo} `;
+            document.querySelector('#tasks').append(li);
+            $(".chats").animate({ scrollTop: $('.chats').prop("scrollHeight")}, 800);
+        });
+    
+    });

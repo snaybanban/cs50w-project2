@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Estás en {{canal}}
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2>Flack Chat</h2>
+    <h1>Canal: {{canal}}</h1>
+
+    <div class="container mt-5 col-12">
+        <div class="chat-box">
+            <div class="client">
+                <div class="client-info">
+                    <h3 class="ml-3">{{session['username']}}</h3>
+                    <p>En linea</p>
+                </div>
+            </div>
+            <div class="chats">
+                {%- if  mensajes -%}
+                {%- for mensaje in mensajes -%}
+                {%- if mensaje[0] != session['username']-%}
+                <li class="client-chat"><b>{{ mensaje[0] }}:</b> {{ mensaje[1] }} {{'\n'}} --- {{ mensaje[2]}}</li>
+                {%- else -%}
+                <li class="my-chat"><b>{{ mensaje[0] }}:</b> {{ mensaje[1] }} {{'\n'}} --- {{ mensaje[2]}}</li>
+                {%- endif -%}
+                {%- endfor -%}
+                {{ '----- These are old messages -----' }}{{- '\n' -}}
+                {%- endif -%}
+                <ul id="tasks">
+                </ul>
+            </div>
+        </div>
+        <div class="chat-input">
+            <form id="new-task">
+                <input id="task" autocomplete="off" autofocus placeholder="New Task" type="text">
+                <input id="submit" type="submit">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
