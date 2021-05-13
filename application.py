@@ -11,7 +11,6 @@ app = Flask(__name__)
 app.debug = True
 app.config["SECRET_KEY"] = 'secret'
 app.config['SESSION_TYPE'] = 'filesystem'
-# socketio = SocketIO(app)
 
 socketio = SocketIO(app, cors_allowed_origin="*")
 
@@ -34,10 +33,10 @@ def login():
     username = request.form.get("username")
     if request.method == "POST":
         if username in users:
-            return "username already exists"
+            return "nombre de usuario ya ocupado"
         users.append(username)
         session['username'] = username
-        # Remember the user session on a cookie if the browser is closed.
+        # Recuerde la sesión del usuario en una cookie si el navegador está cerrado.
         session.permanent = True
 
         return redirect("/")
@@ -67,7 +66,7 @@ def create():
     if newchannel in channels:
         return ("este canal ya existe!")
 
-    # Agregar el canal a la lista
+    # Añade el canal
     channels.append(newchannel)
 
     canalmensajes[newchannel] = deque(maxlen=100)
@@ -83,18 +82,6 @@ def canal(canal):
 
     return render_template('channel.html', channels=channels, canal=canal, mensajes=canalmensajes[canal])
 
-
-@socketio.on('join')
-def on_join():
-    username = session.get('username')
-    room = session.get('canal')
-    print("_---------------entra")
-    join_room(room)
-    emit('joined', {
-        "mensaje": username + " ha entrado a la sala de chat"},
-        room=room)
-
-
 @socketio.on("submit mensaje")
 def msg(data):
     canal = session.get('canal')
@@ -104,13 +91,19 @@ def msg(data):
 
     canalmensajes[canal].append([session.get('username'), mensaje, tiempo])
 
-    #if len(canalmensajes[json["room"]]) > 100:
-        #canalmensajes[json["room"]].pop(0)
-
     emit("announce mensaje", {
         "user": session.get("username"),
         "mensaje": mensaje,
         "tiempo": tiempo},
+        room=room)
+
+@socketio.on('join')
+def on_join():
+    username = session.get('username')
+    room = session.get('canal')
+    join_room(room)
+    emit('joined', {
+        "mensaje": username + " ha ingresado al chat"},
         room=room)
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
             document.querySelector('#submit').disabled = true;
     
-            // Enable button only if there is text in the input field
+            // Habilitar botón solo si hay texto en el campo de entrada
             document.querySelector('#task').onkeyup = () => {
                 if (document.querySelector('#task').value.length > 0)
                     document.querySelector('#submit').disabled = false;
@@ -19,22 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 const mensaje = document.querySelector('#task').value;
     
-                // Clear input field and disable button again
+                // Borra el campo de entrada y deshabilite el botón nuevamente
                 document.querySelector('#task').value = '';
                 document.querySelector('#submit').disabled = true;
                 socket.emit('submit mensaje', {'mensaje': mensaje});
-                // Stop form from submitting
                 return false;
             };       
     
         });
-    
+        
+
         socket.on('joined', data => {
             const li = document.createElement('li');
             li.className = 'list'
             li.innerHTML = `<b>${data.mensaje}`;
             document.querySelector('#tasks').append(li);
-            console.log("aca si");
+            console.log("añadido");
         });
       
         socket.on('announce mensaje', data => {
@@ -48,15 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.className = 'my-chat'
             }
                 
-            li.innerHTML = `<b>${data.user}:</b> ${data.mensaje} --- ${data.tiempo} `;
+            li.innerHTML = `<b>${data.user}:</b> ${data.mensaje} <br> ${data.tiempo} `;
             document.querySelector('#tasks').append(li);
             $(".chats").animate({ scrollTop: $('.chats').prop("scrollHeight")}, 800);
         });
     
     });
-
-    function toggle()
-    {
-    document.querySelector('#blur').classList.toggle('active');
-    document.querySelector('.popup').classList.toggle('active');
-    }
