@@ -28,14 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };       
     
         });
-     
-    
-    
-    
-        // $('#submit').on('click',function()
-        // {
-        //     $(".chats").animate({ scrollTop: $('.chats').prop("scrollHeight")}, 800);
-        // });
     
         socket.on('joined', data => {
             const li = document.createElement('li');

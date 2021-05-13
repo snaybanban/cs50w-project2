@@ -6,16 +6,11 @@ Estás en {{canal}}
 
 {% block content %}
 <div class="text-center">
-    <h2>Flack Chat</h2>
     <h1>Canal: {{canal}}</h1>
-
-    <div class="container mt-5 col-12">
-        <div class="chat-box">
+    <h3 class="ml-3">{{session['username']}}</h3>
+    <p>En linea</p>
             <div class="client">
-                <div class="client-info">
-                    <h3 class="ml-3">{{session['username']}}</h3>
-                    <p>En linea</p>
-                </div>
+                <img class="imgif" src="https://img.icons8.com/pastel-glyph/64/000000/chat.gif"/>
             </div>
             <div class="chats">
                 {%- if  mensajes -%}
@@ -31,13 +26,5 @@ Estás en {{canal}}
                 <ul id="tasks">
                 </ul>
             </div>
-        </div>
-        <div class="chat-input">
-            <form id="new-task">
-                <input id="task" autocomplete="off" autofocus placeholder="New Task" type="text">
-                <input id="submit" type="submit">
-            </form>
-        </div>
-    </div>
 </div>
 {% endblock %}

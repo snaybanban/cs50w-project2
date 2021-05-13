@@ -70,7 +70,7 @@ def create():
     # Agregar el canal a la lista
     channels.append(newchannel)
 
-    canalmensajes[newchannel] = deque(maxlen=10)
+    canalmensajes[newchannel] = deque(maxlen=100)
 
     return redirect("/canal/" + newchannel)
 
@@ -103,6 +103,9 @@ def msg(data):
     room = session.get('canal')
 
     canalmensajes[canal].append([session.get('username'), mensaje, tiempo])
+
+    #if len(canalmensajes[json["room"]]) > 100:
+        #canalmensajes[json["room"]].pop(0)
 
     emit("announce mensaje", {
         "user": session.get("username"),
