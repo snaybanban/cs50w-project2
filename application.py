@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.debug = True
 app.config["SECRET_KEY"] = 'secret'
 app.config['SESSION_TYPE'] = 'filesystem'
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 
 socketio = SocketIO(app, cors_allowed_origin="*")
 
@@ -49,37 +49,37 @@ def login():
 def logout():
     """Log user out"""
     usuario = session['username']
-    # Forget any user_id
     session.clear()
 
     try:
         users.remove(f"{usuario}")
     except ValueError:
         pass
-    # Redirect user to login form
     return redirect("/")
 
 
 @app.route("/create", methods=['POST'])
 def create():
 
-    # obtener el nombre del canal desde el formulario
-    newchannel = request.form.get("channel")
+    # obtener el nombre del canal
+    newchannel = request.form.get("channelname")
 
     if newchannel in channels:
-        return ("that channel already exists!")
+        return ("este canal ya existe!")
 
-    # Agregar el canal a la lista global e canales
+    # Agregar el canal a la lista
     channels.append(newchannel)
 
-    canalmensajes[newchannel] = deque(maxlen=100)
+    canalmensajes[newchannel] = deque(maxlen=10)
 
-    return redirect("channel" + newchannel)
+    return redirect("/canal/" + newchannel)
 
 
-@app.route("/<canal>")
+@app.route("/canal/<canal>")
 def canal(canal):
     session['canal'] = canal
+    print(canal)
+    print(channels)
 
     return render_template('channel.html', channels=channels, canal=canal, mensajes=canalmensajes[canal])
 

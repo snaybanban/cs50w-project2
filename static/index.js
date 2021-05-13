@@ -32,11 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     
-        $('#submit').on('click',function()
-        {
-            //Fijo el scroll al fondo usando añadiendo una animación (animate)
-            $(".chats").animate({ scrollTop: $('.chats').prop("scrollHeight")}, 800);
-        });
+        // $('#submit').on('click',function()
+        // {
+        //     $(".chats").animate({ scrollTop: $('.chats').prop("scrollHeight")}, 800);
+        // });
     
         socket.on('joined', data => {
             const li = document.createElement('li');
@@ -63,3 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
     });
+
+    function toggle()
+    {
+    document.querySelector('#blur').classList.toggle('active');
+    document.querySelector('.popup').classList.toggle('active');
+    }
